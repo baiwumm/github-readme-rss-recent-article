@@ -137,6 +137,16 @@ export function generateArticleCard(item: {
 `;
 }
 
+export function getCdnUrlFromProxy(proxyUrl: string): string | null {
+  try {
+    const url = new URL(proxyUrl);
+    const uriParam = url.searchParams.get("uri");
+    return uriParam ? decodeURIComponent(uriParam) : null;
+  } catch {
+    return null;
+  }
+}
+
 // 从RSS内容中提取缩略图
 export function extractThumbnail(item: RssItem): string | null {
   if (item.enclosure?.url) return item.enclosure.url;

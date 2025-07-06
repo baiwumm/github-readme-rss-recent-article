@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import Parser from 'rss-parser';
-import { generateArticleCard, extractThumbnail } from '@/lib/generateSvg';
+import { generateArticleCard, extractThumbnail, getCdnUrlFromProxy } from '@/lib/generateSvg';
 import { RssItem } from '@/lib/type';
 
 const parser = new Parser();
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       description: item.contentSnippet || item.description || '无描述内容',
       date: item.pubDate || new Date().toISOString(),
       url: item.link || '#',
-      thumbnail: extractThumbnail(item) || 'https://picsum.photos/300/200'
+      thumbnail: getCdnUrlFromProxy(extractThumbnail(item) as string) || 'https://picsum.photos/300/200'
     };
 
     const svg = generateArticleCard(article);
@@ -33,7 +33,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return new NextResponse(svg, {
       headers: {
         'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'public, max-age=3600' // 缓存1小时
+        'Cache-Control': 'public, max-age=3600', // 缓存1小时
+        'Access-Control-Allow-Origin': '*', // 允许所有来源
       }
     });
   } catch {
