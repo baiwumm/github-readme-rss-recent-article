@@ -19,15 +19,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const articleIndex = Math.min(Number(id), feed.items.length - 1);
     const item = feed.items[articleIndex] as RssItem;
 
-    // 直接返回URL字符串（非JSON）
-    return new NextResponse(item?.link || pkg.author.url, {
-      headers: {
-        'Content-Type': 'text/plain',
-        'Cache-Control': 'public, max-age=3600' // 缓存1小时
-      }
-    });
+    return NextResponse.redirect(
+      item?.link || pkg.author.url,
+      302 // 临时重定向
+    );
   } catch {
-    return new NextResponse('Internal Server Error', { status: 500 });
+    return NextResponse.redirect(pkg.author.url, 302 // 临时重定向
+    );
   }
 }
 
