@@ -1,3 +1,4 @@
+import { RssItem } from './type'
 export function escapeXml(unsafe: string) {
   return unsafe.replace(/[<>&'"]/g, function (c) {
     switch (c) {
@@ -137,7 +138,7 @@ export function generateArticleCard(item: {
 }
 
 // 从RSS内容中提取缩略图
-export function extractThumbnail(item: any): string | null {
+export function extractThumbnail(item: RssItem): string | null {
   if (item.enclosure?.url) return item.enclosure.url;
 
   // 尝试从内容中提取第一个图片
