@@ -1,13 +1,14 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import Parser from 'rss-parser';
 import { generateArticleCard, extractThumbnail } from '@/lib/generateSvg';
 import { RssItem } from '@/lib/type';
 
 const parser = new Parser();
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    const { id } = await params;
+    const { pathname } = new URL(request.url);
+    const id = parseInt(pathname.split('/').pop() || '0');
     const feed = await parser.parseURL(process.env.RSS_URL as string);
 
     if (!feed.items || feed.items.length === 0) {
