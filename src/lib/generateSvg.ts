@@ -28,7 +28,15 @@ export function formatGMTDate(gmtString: string): string {
   return `${year}年${month}月${day}日 ${hours}:${minutes}`;
 }
 
-export function generateArticleCard(item: {
+async function urlToBase64(url: string) {
+  const response = await fetch(url);
+  // 使用 .arrayBuffer() 替代 .buffer()
+  const arrayBuffer = await response.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  return `data:${response.headers.get('content-type')};base64,${buffer.toString('base64')}`;
+}
+
+export async function generateArticleCard(item: {
   title: string;
   description: string;
   date: string;
@@ -40,7 +48,8 @@ export function generateArticleCard(item: {
   const safeDescription = escapeXml(item.description);
   const safeDate = formatGMTDate(escapeXml(item.date));
   const safeUrl = escapeXml(item.url);
-  // const safeThumbnail = escapeXml(item.thumbnail);
+  const safeThumbnail = await urlToBase64(escapeXml(item.thumbnail));
+  console.log('safeThumbnail', safeThumbnail)
   return `
 <svg fill="none" width="100%" height="100%" viewBox="0 0 1000 140" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
   <foreignObject width="100%" height="100%">
@@ -123,6 +132,7 @@ export function generateArticleCard(item: {
       </style>
       <div class="outer-container flex">
         <a class="container flex" href="${safeUrl}" target="_blank">
+          <img src="${safeThumbnail}"/>
           <div class="right">
             <h3>${safeTitle}</h3>
             <small>${safeDate}</small>
