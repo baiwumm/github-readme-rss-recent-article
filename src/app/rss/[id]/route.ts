@@ -28,7 +28,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       thumbnail: getCdnUrlFromProxy(extractThumbnail(item) as string) || 'https://picsum.photos/300/200'
     };
 
-    const svg = generateArticleCard(article);
+    const svg = await generateArticleCard(article);
 
     return new NextResponse(svg, {
       headers: {
