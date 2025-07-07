@@ -1,6 +1,8 @@
 {
   "name": "github-readme-rss-recent-article",
   "version": "0.1.0",
+  "url": "https://baiwumm.com",
+  "email": "baiwumm@foxmail.com",
   "author": {
     "name": "baiwumm",
     "email": "baiwumm@foxmail.com",
@@ -20,6 +22,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@iconify/react": "^6.0.0",
     "next": "15.3.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
