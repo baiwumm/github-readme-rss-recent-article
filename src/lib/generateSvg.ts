@@ -19,6 +19,9 @@ export function formatGMTDate(gmtString: string): string {
     return "无效日期";
   }
 
+  // 添加8小时（转为北京时间）
+  date.setHours(date.getHours() + 8);
+
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -49,7 +52,6 @@ export async function generateArticleCard(item: {
   const safeDate = formatGMTDate(escapeXml(item.date));
   const safeUrl = escapeXml(item.url);
   const safeThumbnail = await urlToBase64(escapeXml(item.thumbnail));
-  console.log('safeThumbnail', safeThumbnail)
   return `
 <svg fill="none" width="100%" height="100%" viewBox="0 0 1000 140" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
   <foreignObject width="100%" height="100%">
